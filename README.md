@@ -19,10 +19,24 @@
 ## 使用示例 Usage
 
 ```swift
-import SwiftUISuperView
+import SwiftUI
+enum HeaderType: Int, CaseIterable, Identifiable {
+    case first = 0
+    case second = 1
+    case third = 2
 
+    var title: String {
+        switch self {
+        case .first: "第一个"
+        case .second: "第二个"
+        case .third: "第三个"
+        }
+    }
+
+    var id: Int { rawValue }
+}
 struct ContentView: View {
-    @State var selectedType: SubTopType = .first
+    @State var selectedType: HeaderType = .first
     var body: some View {
         SuperStickyTabContainer(
             selectedType: $selectedType,
@@ -56,7 +70,7 @@ struct ContentView: View {
             },
             adsorptionHeader: { actions in
                 HStack(spacing: 12) {
-                    ForEach(Array(SubTopType.allCases)) { type in
+                    ForEach(Array(HeaderType.allCases)) { type in
                         Text("\(type.id)")
                             .padding(.vertical, 8)
                             .padding(.horizontal, 16)
@@ -129,4 +143,5 @@ struct ContentView: View {
 #Preview {
     ContentView()
 }
+
 ```
