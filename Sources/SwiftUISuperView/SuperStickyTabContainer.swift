@@ -31,7 +31,7 @@ public struct SuperStickyTabContainer<HeaderSwitch: CaseIterable & Identifiable 
     private let background: Background
     private let scroBackground:(_ dropDownOffset:CGFloat) -> ScroBackground
     
-    init(
+    public init(
         selectedType: Binding<HeaderSwitch>,
         @ViewBuilder topMaskView: () -> TopMask = { Color.white },
         @ViewBuilder topView: () -> Top = { EmptyView() },
@@ -209,9 +209,9 @@ extension SuperStickyTabContainer {
 }
 
 ///获取视图大小
-struct SizeObserver: ViewModifier {
+public struct SizeObserver: ViewModifier {
     let onChange: (CGSize) -> Void
-    func body(content: Content) -> some View {
+    public func body(content: Content) -> some View {
         content
             .background(alignment: .center, content: {
                 GeometryReader { geometry in
@@ -227,7 +227,7 @@ struct SizeObserver: ViewModifier {
 
 extension View {
     ///获取视图大小
-    func observeSize(_ onChange: @escaping (CGSize) -> Void) -> some View {
+    public func observeSize(_ onChange: @escaping (CGSize) -> Void) -> some View {
         modifier(SizeObserver(onChange: onChange))
     }
 }
