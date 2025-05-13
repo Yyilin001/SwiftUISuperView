@@ -20,6 +20,11 @@ SuperStickyTabContainer是推出的第一个视图组件
 1. 支持创建具有顶部视图、顶部内容、可吸附切换标签栏、底部内容等复杂布局的场景
 2. 自动处理安全区问题
 3. 自动记录记录滚动位置
+
+## 🎬 演示视频
+
+[下载视频](https://github.com/Yyilin001/SwiftUISuperView/Resources/SuperStickyTabContainerVideo.mp4)
+
 ## 使用示例 Usage
 
 
