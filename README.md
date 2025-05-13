@@ -16,11 +16,12 @@
 
 ---
 
-SuperStickyTabContainer是推出的第一个视图组件
+### SuperStickyTabContainer是SwiftUISuperView推出的第一个视图组件
 1. 支持创建具有顶部视图、顶部内容、可吸附切换标签栏、底部内容等复杂布局的场景
 2. 自动处理安全区问题
 3. 自动记录滚动位置
 4. 传递Scroll内容偏移
+5. 支持惰性视图
 
 ## 演示
 ![演示](https://github.com/Yyilin001/SwiftUISuperView/blob/main/Resources/ScreenRecording_05-13-202517-38-34_1-ezgif.com-optimize.gif)
@@ -99,7 +100,7 @@ struct ContentView: View {
                         LazyVStack {
                             ForEach(0 ... 5, id: \.self) { i in
                                 HStack {
-                                    Image("1233")
+                                    Image("123")
                                         .resizable()
                                         .aspectRatio(contentMode: .fit)
                                         .frame(width: 120)
@@ -113,7 +114,6 @@ struct ContentView: View {
                             }
                         }
                     case .second:
-
                         LazyVStack {
                             ForEach(0 ... 500, id: \.self) { i in
                                 HStack {
