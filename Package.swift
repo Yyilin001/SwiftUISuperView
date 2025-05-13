@@ -7,6 +7,7 @@ let package = Package(
     name: "SwiftUISuperView",
     platforms: [
            .iOS(.v15),
+           .macOS(.v14),
        ],
     products: [
         .library(

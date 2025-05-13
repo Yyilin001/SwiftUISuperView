@@ -29,8 +29,8 @@ public struct SuperStickyTabContainer<HeaderSwitch: CaseIterable & Identifiable 
     private let adsorptionHeaderBuilder: (_ actions: [HeaderSwitch: () -> Void]) -> Header
     private let bottomContent: BottomContent
     private let background: Background
-    private let scroBackground:(_ dropDownOffset:CGFloat) -> ScroBackground
-    
+    private let scroBackground: (_ dropDownOffset: CGFloat) -> ScroBackground
+
     public init(
         selectedType: Binding<HeaderSwitch>,
         @ViewBuilder topMaskView: () -> TopMask = { Color.white },
@@ -39,12 +39,12 @@ public struct SuperStickyTabContainer<HeaderSwitch: CaseIterable & Identifiable 
         @ViewBuilder adsorptionHeader: @escaping (_ actions: [HeaderSwitch: () -> Void]) -> Header,
         @ViewBuilder bottomContent: () -> BottomContent = { EmptyView() },
         @ViewBuilder background: () -> Background = { EmptyView() },
-        @ViewBuilder scroBackground: @escaping (_ dropDownOffset:CGFloat) -> ScroBackground = { dropDownOffset in EmptyView() }
+        @ViewBuilder scroBackground: @escaping (_ dropDownOffset: CGFloat) -> ScroBackground = { _ in EmptyView() }
     ) {
         self.topMaskView = topMaskView()
         self.topView = topView()
         self.topContent = topContent()
-        self.adsorptionHeaderBuilder = adsorptionHeader
+        adsorptionHeaderBuilder = adsorptionHeader
         self.bottomContent = bottomContent()
         self.background = background()
         self.scroBackground = scroBackground
@@ -58,8 +58,8 @@ public struct SuperStickyTabContainer<HeaderSwitch: CaseIterable & Identifiable 
     @State private var topContentHeight: CGFloat = .zero
     @State private var topViewHeight: CGFloat = .zero
     @State private var headerHeight: CGFloat = .zero
-    @Binding var selectedType: HeaderSwitch
     @State private var dropDownOffset: CGFloat = .zero
+    @Binding var selectedType: HeaderSwitch
     public var body: some View {
         ZStack {
             background.ignoresSafeArea(edges: edges)
@@ -79,13 +79,13 @@ public struct SuperStickyTabContainer<HeaderSwitch: CaseIterable & Identifiable 
                             .frame(width: 0, height: 0)
                         }
                     ScrollViewReader { scro in
-                        ScrollView(.vertical,showsIndicators:showsIndicators) {
+                        ScrollView(.vertical, showsIndicators: showsIndicators) {
                             ZStack {
                                 VStack(spacing: .zero) {
                                     topContent.observeSize { topContentHeight = $0.height }
                                     GeometryReader { proxy in
                                         let minY = proxy.frame(in: .named(spaceName)).minY
-                                        
+
                                         let offset = autoHandleTopArea && edges.contains(.top) && topViewHeight < proxyFrame.safeAreaInsets.top ? minY - topHeaderOffset - proxyFrame.safeAreaInsets.top + topViewHeight : minY - topHeaderOffset
                                         let isOffset = offset <= 0
                                         if isOffset {
@@ -99,24 +99,22 @@ public struct SuperStickyTabContainer<HeaderSwitch: CaseIterable & Identifiable 
                                                 dropDownOffset = offset - topContentHeight
                                             }
                                         }
-                                        
+
                                         let actions: [HeaderSwitch: () -> Void] = Dictionary(uniqueKeysWithValues: HeaderSwitch.allCases.map { type in
                                             (type, {
-                                              
                                                 offsets[selectedType] = minY
-                                       
+
                                                 if minY > topViewHeight {
                                                     offsets[type] = minY
-                                               
+
                                                 } else {
                                                     let offset = edges.contains(.top) && topViewHeight > proxyFrame.safeAreaInsets.top ? topViewHeight - proxyFrame.safeAreaInsets.top : topViewHeight
                                                     if offsets[type] == .zero {
-                                                       if isOffset {
-                                                           offsets[type] = offset
-                                                       }
+                                                        if isOffset {
+                                                            offsets[type] = offset
+                                                        }
                                                     } else {
                                                         offsets[type] = min(offsets[type]!, offset)
-                                         
                                                     }
                                                 }
                                                 selectedType = type
@@ -130,13 +128,13 @@ public struct SuperStickyTabContainer<HeaderSwitch: CaseIterable & Identifiable 
                                             .offset(y: isOffset ? -offset : .zero)
                                     }
                                     .zIndex(Double.greatestFiniteMagnitude)
-                                    Color.white.frame(height:max(0,headerHeight - suggestionHeight)).hidden()
-                                        bottomContent
+                                    Color.white.frame(height: max(0, headerHeight - suggestionHeight)).hidden()
+                                    bottomContent
                                 }
                                 ForEach(Array(HeaderSwitch.allCases)) { type in
                                     if let offset = offsets[type], type == selectedType {
                                         VStack(spacing: .zero) {
-                                            Color.white.opacity(0.001).frame(height:max(0, -offset + topHeaderOffset + topContentHeight))
+                                            Color.white.opacity(0.001).frame(height: max(0, -offset + topHeaderOffset + topContentHeight))
                                             Color.white.frame(height: 0).id("\(type.id)")
                                             Spacer()
                                         }
@@ -160,13 +158,13 @@ public struct SuperStickyTabContainer<HeaderSwitch: CaseIterable & Identifiable 
                     }
                 }
             }
-        }.onAppear{
+        }.onAppear {
             offsets = createOffsets()
         }
     }
-    
+
     private func createOffsets() -> [HeaderSwitch: CGFloat] {
-       return HeaderSwitch.allCases.reduce(into: [:]) { result, key in
+        return HeaderSwitch.allCases.reduce(into: [:]) { result, key in
             result[key] = 0
         }
     }
@@ -181,6 +179,7 @@ extension SuperStickyTabContainer {
         config.edges = edges
         return config
     }
+
     /// 设置是否自动显示安全区遮罩。
     /// - Parameter show: Bool (`true`、`false`）
     /// - Returns: 修改后的 `StickyTabContainer`
@@ -189,6 +188,7 @@ extension SuperStickyTabContainer {
         config.autoShowTopMask = show
         return config
     }
+
     /// 设置是否显示滚动指示器。
     /// - Parameter show: Bool (`true`、`false`）
     /// - Returns: 修改后的 `StickyTabContainer`
@@ -197,6 +197,7 @@ extension SuperStickyTabContainer {
         config.showsIndicators = show
         return config
     }
+
     /// 设置吸附头部视图是否自动处理顶部安全区。
     /// - Parameter auto: Bool (`true`、`false`）
     /// - Returns: 修改后的 `StickyTabContainer`
@@ -204,30 +205,5 @@ extension SuperStickyTabContainer {
         var config = self
         config.autoHandleTopArea = auto
         return config
-    }
-    
-}
-
-///获取视图大小
-public struct SizeObserver: ViewModifier {
-    let onChange: (CGSize) -> Void
-    public func body(content: Content) -> some View {
-        content
-            .background(alignment: .center, content: {
-                GeometryReader { geometry in
-                    Color.clear
-                        .onAppear { onChange(geometry.size) }
-                        .onChange(of: geometry.size) { size in
-                            onChange(size)
-                        }
-                }}
-            )
-    }
-}
-
-extension View {
-    ///获取视图大小
-    public func observeSize(_ onChange: @escaping (CGSize) -> Void) -> some View {
-        modifier(SizeObserver(onChange: onChange))
     }
 }
