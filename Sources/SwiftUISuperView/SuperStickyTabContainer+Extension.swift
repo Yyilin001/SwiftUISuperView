@@ -23,6 +23,7 @@ public struct SuperStickyTabContainer<HeaderSwitch: CaseIterable & Identifiable 
     private var autoShowTopMask = true
     private var showsIndicators = true
     private var autoHandleTopArea = true
+    private var onOffsetChange: (CGFloat) -> Void = { _ in }
     private let topMaskView: TopMask
     private let topView: Top
     private let topContent: TopContent
@@ -92,11 +93,13 @@ public struct SuperStickyTabContainer<HeaderSwitch: CaseIterable & Identifiable 
                                             Task { @MainActor in
                                                 showTopMask = true
                                                 dropDownOffset = offset - topContentHeight
+                                                onOffsetChange(dropDownOffset)
                                             }
                                         } else {
                                             Task { @MainActor in
                                                 showTopMask = false
                                                 dropDownOffset = offset - topContentHeight
+                                                onOffsetChange(dropDownOffset)
                                             }
                                         }
 
@@ -205,5 +208,14 @@ extension SuperStickyTabContainer {
         var config = self
         config.autoHandleTopArea = auto
         return config
+    }
+    
+    /// 设置一个回调，用于监听偏移量（offset）的变化。
+    /// - Parameter handler: 接收当前偏移量的回调闭包，参数为 `CGFloat`。
+    /// - Returns: 修改后的 `SuperStickyTabContainer` 实例。
+    public func onOffsetChange(_ handler: @escaping (CGFloat) -> Void) -> SuperStickyTabContainer {
+        var copy = self
+        copy.onOffsetChange = handler
+        return copy
     }
 }
