@@ -16,7 +16,7 @@ import SwiftUI
 ///   - bottomContent: 吸附头部下部主要内容（可滚动）
 ///   - background: 整体背景（可选）
 ///   - scroBackground: ScrollView 背景（可选）
-struct SuperStickyTabContainer<HeaderSwitch: CaseIterable & Identifiable & Hashable, TopMask: View, Top: View, TopContent: View, Header: View, BottomContent: View, Background: View, ScroBackground: View>: View {
+public struct SuperStickyTabContainer<HeaderSwitch: CaseIterable & Identifiable & Hashable, TopMask: View, Top: View, TopContent: View, Header: View, BottomContent: View, Background: View, ScroBackground: View>: View {
     private let spaceName: String = UUID().uuidString
     private let suggestionHeight = 10.0
     private var edges: Edge.Set = []
@@ -60,7 +60,7 @@ struct SuperStickyTabContainer<HeaderSwitch: CaseIterable & Identifiable & Hasha
     @State private var headerHeight: CGFloat = .zero
     @Binding var selectedType: HeaderSwitch
     @State private var dropDownOffset: CGFloat = .zero
-    var body: some View {
+    public var body: some View {
         ZStack {
             background.ignoresSafeArea(edges: edges)
             GeometryReader { proxyFrame in
@@ -176,7 +176,7 @@ extension SuperStickyTabContainer {
     /// 设置忽略的 SafeArea 边缘。
     /// - Parameter edges: 要忽略的边缘（如 `.top`、`.bottom`）
     /// - Returns: 修改后的 `StickyTabContainer`
-    func adsorptionEdges(_ edges: Edge.Set) -> SuperStickyTabContainer {
+    public func adsorptionEdges(_ edges: Edge.Set) -> SuperStickyTabContainer {
         var config = self
         config.edges = edges
         return config
@@ -184,7 +184,7 @@ extension SuperStickyTabContainer {
     /// 设置是否自动显示安全区遮罩。
     /// - Parameter show: Bool (`true`、`false`）
     /// - Returns: 修改后的 `StickyTabContainer`
-    func autoShowTopMask(_ show: Bool) -> SuperStickyTabContainer {
+    public func autoShowTopMask(_ show: Bool) -> SuperStickyTabContainer {
         var config = self
         config.autoShowTopMask = show
         return config
@@ -192,7 +192,7 @@ extension SuperStickyTabContainer {
     /// 设置是否显示滚动指示器。
     /// - Parameter show: Bool (`true`、`false`）
     /// - Returns: 修改后的 `StickyTabContainer`
-    func showsIndicators(_ show: Bool) -> SuperStickyTabContainer {
+    public func showsIndicators(_ show: Bool) -> SuperStickyTabContainer {
         var config = self
         config.showsIndicators = show
         return config
@@ -200,7 +200,7 @@ extension SuperStickyTabContainer {
     /// 设置吸附头部视图是否自动处理顶部安全区。
     /// - Parameter auto: Bool (`true`、`false`）
     /// - Returns: 修改后的 `StickyTabContainer`
-    func autoHandleTopArea(_ auto: Bool) -> SuperStickyTabContainer {
+    public func autoHandleTopArea(_ auto: Bool) -> SuperStickyTabContainer {
         var config = self
         config.autoHandleTopArea = auto
         return config
