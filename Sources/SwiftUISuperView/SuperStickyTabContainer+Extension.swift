@@ -92,14 +92,19 @@ public struct SuperStickyTabContainer<HeaderSwitch: CaseIterable & Identifiable 
                                         if isOffset {
                                             Task { @MainActor in
                                                 showTopMask = true
-                                                dropDownOffset = offset - topContentHeight
-                                                onOffsetChange(dropDownOffset)
+                                                if dropDownOffset != offset - topContentHeight {
+                                                    dropDownOffset = offset - topContentHeight
+                                                    onOffsetChange(dropDownOffset)
+                                                }
+                                               
                                             }
                                         } else {
                                             Task { @MainActor in
                                                 showTopMask = false
-                                                dropDownOffset = offset - topContentHeight
-                                                onOffsetChange(dropDownOffset)
+                                                if dropDownOffset != offset - topContentHeight {
+                                                    dropDownOffset = offset - topContentHeight
+                                                    onOffsetChange(dropDownOffset)
+                                                }
                                             }
                                         }
 
