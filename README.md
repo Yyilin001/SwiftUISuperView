@@ -23,7 +23,7 @@ SuperStickyTabContainer是推出的第一个视图组件
 4. 传递Scroll内容偏移
 
 ## 演示
-![演示](https://github.com/Yyilin001/SwiftUISuperView/Resources/ScreenRecording_05-13-202517-38-34_1-ezgif.com-optimize.gif)
+![演示](https://github.com/Yyilin001/SwiftUISuperView/blob/main/Resources/ScreenRecording_05-13-202517-38-34_1-ezgif.com-optimize.gif)
 
 ## 使用示例 Usage
 
