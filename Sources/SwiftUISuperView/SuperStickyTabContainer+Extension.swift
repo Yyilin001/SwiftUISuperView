@@ -110,12 +110,10 @@ public struct SuperStickyTabContainer<HeaderSwitch: CaseIterable & Identifiable 
                                         let actions: [HeaderSwitch: () -> Void] = Dictionary(uniqueKeysWithValues: HeaderSwitch.allCases.map { type in
                                             (type, {
                                                 offsets[selectedType] = minY
-
                                                 if minY > topViewHeight {
                                                     offsets[type] = minY
-
                                                 } else {
-                                                    let offset = edges.contains(.top) && topViewHeight > proxyFrame.safeAreaInsets.top ? topViewHeight - proxyFrame.safeAreaInsets.top : topViewHeight
+                                                    let offset = edges.contains(.top) && topViewHeight > proxyFrame.safeAreaInsets.top ? topViewHeight - proxyFrame.safeAreaInsets.top - 1  : topViewHeight - 1
                                                     if offsets[type] == .zero {
                                                         if isOffset {
                                                             offsets[type] = offset

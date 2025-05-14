@@ -24,7 +24,7 @@
 5. 支持惰性视图
 
 ## 演示
-![演示](https://github.com/Yyilin001/SwiftUISuperView/blob/main/Resources/ScreenRecording_05-13-202517-38-34_1-ezgif.com-optimize.gif)
+![演示](https://github.com/Yyilin001/SwiftUISuperView/blob/main/Resources/ScreenRecording_05-14-2025.gif)
 
 ## 使用示例 Usage
 
