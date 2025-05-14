@@ -31,6 +31,8 @@
 
 ```swift
 import SwiftUI
+import SwiftUISuperView
+
 enum HeaderType: Int, CaseIterable, Identifiable {
     case first = 0
     case second = 1
@@ -163,6 +165,7 @@ struct ContentView: View {
         .autoShowTopMask(true)
         .showsIndicators(false)
         .autoHandleTopArea(true)
+        .onOffsetChange{ _ in }
     }
 }
 
