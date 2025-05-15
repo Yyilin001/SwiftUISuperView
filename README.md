@@ -20,8 +20,10 @@
 1. 支持创建具有顶部视图、顶部内容、可吸附切换标签栏、底部内容等复杂布局的场景
 2. 自动处理安全区问题
 3. 自动记录滚动位置
-4. 传递Scroll内容偏移
+4. 传递内容偏移
 5. 支持惰性视图
+6. 传递GeometryProxy与ScrollViewProxy
+7. 支持自定义命名coordinateSpace
 
 ## 演示
 ![演示](https://github.com/Yyilin001/SwiftUISuperView/blob/main/Resources/ScreenRecording_05-14-2025.gif)
@@ -95,7 +97,7 @@ struct ContentView: View {
                 .padding()
                 .background(.white)
             },
-            bottomContent: {
+            bottomContent: { _, _ in
                 VStack(spacing: .zero) {
                     switch selectedType {
                     case .first:
@@ -165,6 +167,7 @@ struct ContentView: View {
         .autoShowTopMask(true)
         .showsIndicators(false)
         .autoHandleTopArea(true)
+        .setSpaceName("listName")
         .onOffsetChange{ _ in }
     }
 }

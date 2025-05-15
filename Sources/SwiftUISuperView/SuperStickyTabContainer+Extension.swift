@@ -17,7 +17,7 @@ import SwiftUI
 ///   - background: 整体背景（可选）
 ///   - scroBackground: ScrollView 背景（可选）
 public struct SuperStickyTabContainer<HeaderSwitch: CaseIterable & Identifiable & Hashable, TopMask: View, Top: View, TopContent: View, Header: View, BottomContent: View, Background: View, ScroBackground: View>: View {
-    private let spaceName: String = UUID().uuidString
+    private var spaceName: String = UUID().uuidString
     private let suggestionHeight = 10.0
     private var edges: Edge.Set = []
     private var autoShowTopMask = true
@@ -28,7 +28,7 @@ public struct SuperStickyTabContainer<HeaderSwitch: CaseIterable & Identifiable 
     private let topView: Top
     private let topContent: TopContent
     private let adsorptionHeaderBuilder: (_ actions: [HeaderSwitch: () -> Void]) -> Header
-    private let bottomContent: BottomContent
+    private let bottomContent:(_ proxy: GeometryProxy,_ scro: ScrollViewProxy) -> BottomContent
     private let background: Background
     private let scroBackground: (_ dropDownOffset: CGFloat) -> ScroBackground
 
@@ -38,7 +38,7 @@ public struct SuperStickyTabContainer<HeaderSwitch: CaseIterable & Identifiable 
         @ViewBuilder topView: () -> Top = { EmptyView() },
         @ViewBuilder topContent: () -> TopContent = { EmptyView() },
         @ViewBuilder adsorptionHeader: @escaping (_ actions: [HeaderSwitch: () -> Void]) -> Header,
-        @ViewBuilder bottomContent: () -> BottomContent = { EmptyView() },
+        @ViewBuilder bottomContent:  @escaping (_ proxy: GeometryProxy,_ scro: ScrollViewProxy) -> BottomContent = { _,_ in EmptyView() },
         @ViewBuilder background: () -> Background = { EmptyView() },
         @ViewBuilder scroBackground: @escaping (_ dropDownOffset: CGFloat) -> ScroBackground = { _ in EmptyView() }
     ) {
@@ -46,7 +46,7 @@ public struct SuperStickyTabContainer<HeaderSwitch: CaseIterable & Identifiable 
         self.topView = topView()
         self.topContent = topContent()
         adsorptionHeaderBuilder = adsorptionHeader
-        self.bottomContent = bottomContent()
+        self.bottomContent = bottomContent
         self.background = background()
         self.scroBackground = scroBackground
         _selectedType = selectedType
@@ -135,7 +135,7 @@ public struct SuperStickyTabContainer<HeaderSwitch: CaseIterable & Identifiable 
                                     .zIndex(Double.greatestFiniteMagnitude)
                                     VStack(spacing:.zero){
                                         Color.white.frame(height: max(0, headerHeight - suggestionHeight)).hidden()
-                                        bottomContent
+                                        bottomContent(proxyFrame,scro)
                                     }
                                 }
                                 .overlay {
@@ -153,11 +153,12 @@ public struct SuperStickyTabContainer<HeaderSwitch: CaseIterable & Identifiable 
                                 }
                         }
                         .background { scroBackground(dropDownOffset) }
+                        .coordinateSpace(name: spaceName)
                     }
                 }
                 .clipped()
                 .ignoresSafeArea(edges: edges)
-                .coordinateSpace(name: spaceName)
+             
                 .overlay(alignment: .top) {
                     if autoShowTopMask && showTopMask {
                         topMaskView.frame(height: proxyFrame.safeAreaInsets.top)
@@ -221,6 +222,15 @@ extension SuperStickyTabContainer {
     public func onOffsetChange(_ handler: @escaping (CGFloat) -> Void) -> SuperStickyTabContainer {
         var copy = self
         copy.onOffsetChange = handler
+        return copy
+    }
+    
+    /// 设置新的坐标空间。
+    /// - Parameter name: 新的名称。
+    /// - Returns: 修改后的 `SuperStickyTabContainer` 实例。
+    public func setSpaceName(_ name:String) -> SuperStickyTabContainer {
+        var copy = self
+        copy.spaceName = name
         return copy
     }
 }
